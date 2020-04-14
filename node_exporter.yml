@@ -22,27 +22,17 @@
             dest: /root/
             remote_src: yes
         - name: copy node_exporter to /usr/local/bin/
-          shell: cp /root/node_exporter-0.18.1.linux-amd64/node_exporter  /usr/local/bin/
-        - name:
-          file:
-            path: /usr/local/bin/node_exporter
+          copy:
+            src: /root/node_exporter-0.18.1.linux-amd64/node_exporter
+            dest: /usr/local/bin/
             owner: node_exporter
             group: node_exporter
-        - name: create node_exporter service
-          shell: |
-            echo '[Unit]
-            Description=Node Exporter
-            Wants=network-online.target
-            After=network-online.target
-
-            [Service]
-            User=node_exporter
-            Group=node_exporter
-            Type=simple
-            ExecStart=/usr/local/bin/node_exporter
-
-            [Install]
-            WantedBy=multi-user.target' >> /etc/systemd/system/node_exporter.service
+            remote_src: yes
+            mode: '0744'
+        - name: copy node_exporter to /usr/local/bin/
+          copy:
+            src: ./node_exporter.service
+            dest: /etc/systemd/system/node_exporter.service
         - name: reload the systemd daemon
           systemd: daemon_reload=yes
         - name: start and enable node_exporter
