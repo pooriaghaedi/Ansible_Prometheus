@@ -2,7 +2,7 @@
 - name: Install and configure node expoter
   hosts: all
   become: yes
-  tasks:
+  tasks: 
         - name: Create node_exporter group
           group:
             name: node_exporter
